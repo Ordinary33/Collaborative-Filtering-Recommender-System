@@ -1,4 +1,8 @@
 __pycache__/
 *.pyc
 .env
-/data
+data/
+!data/.gitkeep
+logs/
+!logs/.gitkeep
+models/*.joblib
