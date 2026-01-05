@@ -20,7 +20,12 @@ class RatingsDataset(Dataset):
         Reads the CSV, encodes User/Book IDs to 0..N integers,
         and saves the encoders for later use.
         """
-        self.df = pd.read_csv(df_path / "raw" / "Ratings.csv")
+        ratings_df = pd.read_csv(df_path / "raw" / "Ratings.csv")
+        books_df = pd.read_csv(df_path / "raw" / "Books.csv")
+
+        valid_isbns = set(books_df["ISBN"].unique())
+
+        self.df = ratings_df[ratings_df["ISBN"].isin(valid_isbns)].copy()
         self.user_encoder = LabelEncoder()
         self.book_encoder = LabelEncoder()
 
