@@ -20,8 +20,10 @@ class RatingsDataset(Dataset):
         Reads the CSV, encodes User/Book IDs to 0..N integers,
         and saves the encoders for later use.
         """
-        ratings_df = pd.read_csv(df_path / "raw" / "Ratings.csv")
-        books_df = pd.read_csv(df_path / "raw" / "Books.csv")
+        ratings_df = pd.read_csv(df_path / "raw" / "Ratings.csv", low_memory=False)
+        books_df = pd.read_csv(df_path / "raw" / "Books.csv", low_memory=False)
+
+        ratings_df = ratings_df[ratings_df["Book-Rating"] > 0]
 
         valid_isbns = set(books_df["ISBN"].unique())
 
@@ -45,7 +47,9 @@ class RatingsDataset(Dataset):
         logger.info(f"Saved user encoder to {uencoder_path}")
         logger.info(f"Saved book encoder to {bencoder_path}")
 
-        self.df.to_csv(df_path / "processed" / "Ratings_encoded.csv", index=False)
+        processed_path = df_path / "processed"
+        processed_path.mkdir(parents=True, exist_ok=True)
+        self.df.to_csv(processed_path / "Ratings_encoded.csv", index=False)
         logger.info("Saved processed ratings to Ratings_encoded.csv")
 
     def __len__(self):
