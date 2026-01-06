@@ -7,13 +7,14 @@ from src.model import MatrixFactorization
 from src.dataset import RatingsDataset
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DF_PATH = PROJECT_ROOT / "data" / "books.csv"
+DF_PATH = PROJECT_ROOT / "data" / "raw" / "Books.csv"
 
 
 class Recommender:
     def __init__(self):
         self.model_path = PROJECT_ROOT / "models" / "matrix_factorization.pth"
         self.book_encoder = joblib.load(PROJECT_ROOT / "models" / "book_encoder.joblib")
+        self.user_encoder = joblib.load(PROJECT_ROOT / "models" / "user_encoder.joblib")
         self.dataset = RatingsDataset()
         self.model = None
         self.item_embeddings = None
@@ -24,7 +25,7 @@ class Recommender:
 
     def load_resources(self):
         self.model = MatrixFactorization(
-            num_users=len(self.dataset.user_encoder.classes_),
+            num_users=len(self.user_encoder.classes_),
             num_items=len(self.book_encoder.classes_),
         )
         self.model.load_state_dict(
@@ -34,7 +35,7 @@ class Recommender:
         self.item_embeddings = self.model.item_embedding.weight.data.numpy()
         self.knn = NearestNeighbors(n_neighbors=10, metric="cosine", algorithm="brute")
         self.knn.fit(self.item_embeddings)
-        self.books_df = pd.read_csv(DF_PATH)
+        self.books_df = pd.read_csv(DF_PATH, low_memory=False)
 
     def recommend(self, isbn: str):
         """
@@ -63,14 +64,26 @@ class Recommender:
 
             if not book_matches.empty:
                 book_info = book_matches.iloc[0]
+                try:
+                    year = int(book_info["Year-Of-Publication"])
+                except ValueError:
+                    year = 0
                 recommendations.append(
                     {
                         "Title": book_info["Book-Title"],
                         "Author": book_info["Book-Author"],
-                        "Year": int(book_info["Year-Of-Publication"]),
-                        "Image": book_info["Image-URL-M"],
+                        "Year": year,
+                        "Image": book_info["Image-URL-L"],
                         "ISBN": str(book_info["ISBN"]),
                     }
                 )
 
         return recommendations
+
+
+if __name__ == "__main__":
+    recommender = Recommender()
+    sample_isbn = "0395177111"
+    recs = recommender.recommend(sample_isbn)
+    for rec in recs:
+        print(rec)
