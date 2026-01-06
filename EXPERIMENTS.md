@@ -17,12 +17,12 @@ The following log details the iterative process used to optimize the Matrix Fact
 
 ### 1. The Baseline (High Variance)
 *Observation: Notice the massive gap between Training and Validation loss.*
-![Baseline Graph](graphs/learningcurve_1.png)
+![Baseline Graph](docs/images/learningcurve_1.png)
 
 ### 2. The Breakthrough (Data Cleaning)
 *Observation: After removing implicit '0' ratings, the validation loss finally tracks with training loss.*
-![Data Cleaning Graph](graphs/learningcurve_7.png)
+![Data Cleaning Graph](docs/images/learningcurve_7.png)
 
 ### 3. Final Convergence
 *Observation: While a generalization gap remains (Train 1.5 vs Val 3.2), the Validation Loss stabilized and reached a robust minimum of 3.19. This indicates the model has successfully learned the latent factors without entering the regime of destructive overfitting.*
-![Final Model Graph](graphs/learningcurve_9.png)
+![Final Model Graph](docs/images/learningcurve_9.png)
