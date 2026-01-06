@@ -5,4 +5,5 @@ data/
 !data/.gitkeep
 logs/
 !logs/.gitkeep
-models/*.joblib
+models/
+graphs/
