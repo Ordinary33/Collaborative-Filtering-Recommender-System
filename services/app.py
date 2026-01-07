@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from utils.recommender import Recommender
 from src.logger_config import setup_logger
 
@@ -14,6 +14,9 @@ def home():
 
 @app.get("/recommend/{isbn}")
 def recommend(isbn: str):
+    if not recommender.is_valid_isbn(isbn):
+        raise HTTPException(status_code=404, detail="ISBN not found in the database.")
+
     recommendations = recommender.recommend(isbn)
 
     response = {

@@ -12,13 +12,17 @@ if st.button("Get Recommendations"):
             response = requests.get(f"http://127.0.0.1:8000/recommend/{isbn}")
             response.raise_for_status()
             result = response.json()
+            recommendations = result.get("data", [])
+
+            st.subheader(f"Recommendations for ISBN: {isbn}")
 
             with st.container():
                 st.subheader("Recommendations:")
                 st.write(result)
 
-        except requests.exceptions.HTTPError as err:
-            st.error(f"Book not found or API error : {err}")
+        except requests.exceptions.HTTPError:
+            st.error(f"Book with the isbn {isbn} not found in the database")
+            st.info("Please try another ISBN.")
         except Exception as e:
             st.error(f"An error occurred: {e}")
     else:

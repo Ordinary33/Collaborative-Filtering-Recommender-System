@@ -21,6 +21,8 @@ class Recommender:
         self.books_df = None
         self.knn = None
 
+        self.valid_isbns = set(self.book_encoder.classes_)
+
         self.load_resources()
 
     def load_resources(self):
@@ -37,6 +39,9 @@ class Recommender:
         self.knn.fit(self.item_embeddings)
         self.books_df = pd.read_csv(DF_PATH, low_memory=False)
 
+    def is_valid_isbn(self, isbn: str) -> bool:
+        return isbn in self.valid_isbns
+
     def recommend(self, isbn: str):
         """
             Function to get book recommendations based on user input.
@@ -46,11 +51,10 @@ class Recommender:
         Returns:
             list: A list containing recommended book titles and their details.
         """
-        try:
-            encoded_id = self.book_encoder.transform([isbn])[0]
-        except ValueError:
-            print(f"ISBN {isbn} not found in the encoder.")
+        if not self.is_valid_isbn(isbn):
             return []
+
+        encoded_id = self.book_encoder.transform([isbn])[0]
 
         distances, indices = self.knn.kneighbors(
             [self.item_embeddings[encoded_id]], n_neighbors=11
