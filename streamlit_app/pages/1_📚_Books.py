@@ -14,7 +14,7 @@ if st.button("Get Recommendations"):
             result = response.json()
             recommendations = result.get("data", [])
 
-            st.subheader(f"Recommendations for ISBN: {isbn}")
+            st.subheader(f"Recommendations for {result.get('title', 'the book')}:")
 
             with st.container():
                 st.subheader("Recommendations:")

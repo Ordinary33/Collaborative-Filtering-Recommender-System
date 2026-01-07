@@ -59,7 +59,9 @@ class Recommender:
         distances, indices = self.knn.kneighbors(
             [self.item_embeddings[encoded_id]], n_neighbors=11
         )
-
+        query_title = self.books_df[self.books_df["ISBN"] == isbn]["Book-Title"].values[
+            0
+        ]
         recommendations = []
         for i in range(1, len(indices[0])):
             books_id = indices[0][i]
@@ -82,7 +84,7 @@ class Recommender:
                     }
                 )
 
-        return recommendations
+        return query_title, recommendations
 
 
 if __name__ == "__main__":

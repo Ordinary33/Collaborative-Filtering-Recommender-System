@@ -17,10 +17,11 @@ def recommend(isbn: str):
     if not recommender.is_valid_isbn(isbn):
         raise HTTPException(status_code=404, detail="ISBN not found in the database.")
 
-    recommendations = recommender.recommend(isbn)
+    title, recommendations = recommender.recommend(isbn)
 
     response = {
         "input_isbn": isbn,
+        "title": title,
         "results": len(recommendations),
         "data": recommendations,
     }
