@@ -3,7 +3,7 @@ import requests
 
 st.title("Book Recommender")
 
-isbn = st.text_input("Enter ISBN of a book")
+isbn = st.text_input("Enter 10-digit ISBN of a book")
 
 
 if st.button("Get Recommendations"):
@@ -17,7 +17,6 @@ if st.button("Get Recommendations"):
             st.subheader(f"Recommendations for {result.get('title', 'the book')}:")
 
             with st.container():
-                st.subheader("Recommendations:")
                 st.write(result)
 
         except requests.exceptions.HTTPError:
