@@ -15,7 +15,7 @@ logger = setup_logger(__name__)
 
 
 class MovieRatingsDataset(Dataset):
-    def __init__(self, df_path=DF_PATH, models_path=MODELS_PATH):
+    def __init__(self, df_path=DF_PATH, models_path=MODELS_PATH, limit=None):
         """
         Reads the CSV, encodes User/Movie IDs to 0..N integers,
         and saves the encoders for later use.
@@ -26,6 +26,12 @@ class MovieRatingsDataset(Dataset):
         movie_df = pd.read_csv(df_path / "raw" / "Movies.csv", low_memory=False)
 
         movie_ratings_df = movie_ratings_df.drop("timestamp", axis=1)
+
+        if limit:
+            logger.warning(
+                f"Limiting dataset to first {limit} entries for testing purposes."
+            )
+            movie_ratings_df = movie_ratings_df.head(limit)
 
         valid_id = set(movie_df["movieId"].unique())
 
