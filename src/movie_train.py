@@ -19,14 +19,18 @@ LR = 0.001
 
 
 def train(num_epochs=EPOCHS, batch_size=BATCH_SIZE, learning_rate=LR):
-    dataset = MovieRatingsDataset()
+    dataset = MovieRatingsDataset(limit=10000)
 
     train_size = int(0.8 * len(dataset))
     val_size = len(dataset) - train_size
     train_df, val_df = random_split(dataset, [train_size, val_size])
 
-    train_loader = DataLoader(train_df, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_df, batch_size=batch_size, shuffle=False)
+    train_loader = DataLoader(
+        train_df, batch_size=batch_size, shuffle=True, pin_memory=True
+    )
+    val_loader = DataLoader(
+        val_df, batch_size=batch_size, shuffle=False, pin_memory=True
+    )
 
     num_users = len(dataset.movie_user_encoder.classes_)
     num_items = len(dataset.movie_encoder.classes_)

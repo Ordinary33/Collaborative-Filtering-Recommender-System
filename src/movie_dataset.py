@@ -21,7 +21,7 @@ class MovieRatingsDataset(Dataset):
         and saves the encoders for later use.
         """
         movie_ratings_df = pd.read_csv(
-            df_path / "raw" / "Movie_Ratings.csv", low_memory=False
+            df_path / "raw" / "Movie_Ratings.csv", low_memory=False, nrows=limit
         )
         movie_df = pd.read_csv(df_path / "raw" / "Movies.csv", low_memory=False)
 
