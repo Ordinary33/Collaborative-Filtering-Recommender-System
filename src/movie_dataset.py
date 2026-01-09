@@ -27,12 +27,6 @@ class MovieRatingsDataset(Dataset):
 
         movie_ratings_df = movie_ratings_df.drop("timestamp", axis=1)
 
-        if limit:
-            logger.warning(
-                f"Limiting dataset to first {limit} entries for testing purposes."
-            )
-            movie_ratings_df = movie_ratings_df.head(limit)
-
         valid_id = set(movie_df["movieId"].unique())
 
         self.df = movie_ratings_df[movie_ratings_df["movieId"].isin(valid_id)].copy()
