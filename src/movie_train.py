@@ -19,7 +19,7 @@ LR = 0.001
 
 
 def train(num_epochs=EPOCHS, batch_size=BATCH_SIZE, learning_rate=LR):
-    dataset = MovieRatingsDataset(limit=10000)
+    dataset = MovieRatingsDataset(limit=100000)
 
     train_size = int(0.8 * len(dataset))
     val_size = len(dataset) - train_size
