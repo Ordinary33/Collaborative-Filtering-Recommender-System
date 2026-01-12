@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-embedding_dim = 50
+embedding_dim = 128
 
 
 class MatrixFactorization(nn.Module):
@@ -10,7 +10,7 @@ class MatrixFactorization(nn.Module):
         self.user_embedding = nn.Embedding(num_users, embedding_dim)
         self.item_embedding = nn.Embedding(num_items, embedding_dim)
 
-        self.dropout = nn.Dropout(p=0.2)
+        self.dropout = nn.Dropout(p=0.05)
 
         self.user_bias = nn.Embedding(num_users, 1)
         self.item_bias = nn.Embedding(num_items, 1)

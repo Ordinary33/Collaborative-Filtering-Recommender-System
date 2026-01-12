@@ -20,17 +20,17 @@ LR = 0.001
 
 
 def train(num_epochs=EPOCHS, batch_size=BATCH_SIZE, learning_rate=LR):
-    dataset = MovieRatingsDataset(limit=1000000)
+    dataset = MovieRatingsDataset()
 
     train_size = int(0.8 * len(dataset))
     val_size = len(dataset) - train_size
     train_df, val_df = random_split(dataset, [train_size, val_size])
 
     train_loader = DataLoader(
-        train_df, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=4
+        train_df, batch_size=batch_size, shuffle=True, pin_memory=True
     )
     val_loader = DataLoader(
-        val_df, batch_size=batch_size, shuffle=False, pin_memory=True, num_workers=4
+        val_df, batch_size=batch_size, shuffle=False, pin_memory=True
     )
 
     num_users = len(dataset.movie_user_encoder.classes_)
@@ -40,9 +40,29 @@ def train(num_epochs=EPOCHS, batch_size=BATCH_SIZE, learning_rate=LR):
     model = model.to(DEVICE)
 
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-4)
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-5)
 
     scheduler = ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=2)
+
+    checkpoint_path = MODELS_PATH / "movie_matrix_factorization_checkpoint.pth"
+    start_epoch = 0
+
+    if checkpoint_path.exists():
+        logger.info(f"Checkpoint found at {checkpoint_path}. Loading...")
+        checkpoint = torch.load(checkpoint_path)
+
+        model.load_state_dict(checkpoint["model_state_dict"])
+
+        optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+
+        start_epoch = checkpoint["epoch"] + 1
+        best_loss = checkpoint["loss"]
+
+        logger.info(
+            f"Resuming from Epoch {start_epoch + 1} (Best Loss: {best_loss:.4f})"
+        )
+    else:
+        logger.info("No checkpoint found. Starting fresh.")
 
     early_stopping_patience = 4
     epochs_no_improve = 0
@@ -51,7 +71,7 @@ def train(num_epochs=EPOCHS, batch_size=BATCH_SIZE, learning_rate=LR):
     train_losses = []
     val_losses = []
 
-    for epoch in range(num_epochs):
+    for epoch in range(start_epoch, num_epochs):
         model.train()
         total_train_loss = 0
         for users, items, ratings in train_loader:
