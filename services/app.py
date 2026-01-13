@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
-from utils.recommender import Recommender
+from utils.book_recommender import BookRecommender
 from src.logger_config import setup_logger
 
 app = FastAPI()
-recommender = Recommender()
+recommender = BookRecommender()
 logger = setup_logger("api")
 
 

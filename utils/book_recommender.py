@@ -10,7 +10,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DF_PATH = PROJECT_ROOT / "data" / "raw" / "Books.csv"
 
 
-class Recommender:
+class BookRecommender:
     def __init__(self):
         self.model_path = PROJECT_ROOT / "models" / "matrix_factorization.pth"
         self.book_encoder = joblib.load(PROJECT_ROOT / "models" / "book_encoder.joblib")
@@ -85,11 +85,3 @@ class Recommender:
                 )
 
         return query_title, recommendations
-
-
-if __name__ == "__main__":
-    recommender = Recommender()
-    sample_isbn = "0395177111"
-    recs = recommender.recommend(sample_isbn)
-    for rec in recs:
-        print(rec)
