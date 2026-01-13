@@ -26,3 +26,21 @@ The following log details the iterative process used to optimize the Matrix Fact
 ### 3. Final Convergence
 *Observation: While a generalization gap remains (Train 1.5 vs Val 3.2), the Validation Loss stabilized and reached a robust minimum of 3.19. This indicates the model has successfully learned the latent factors without entering the regime of destructive overfitting.*
 ![Final Model Graph](docs/images/learningcurve_9.png)
+
+The following log details the iterative process used to optimize the Matrix Factorization model. The primary challenge was scaling the architecture from a data subset (1M rows) to the full dataset (25M rows) while managing model capacity to prevent underfitting.
+
+| Exp # | Modification / Hypothesis | Training Loss (MSE) | Validation Loss (MSE) | Observation |
+| :--- | :--- | :--- | :--- | :--- |
+| **1** | **Baseline (1M Subset):** Initial run on data subset with default regularization (Dropout 0.2, Decay 1e-4) and Dim 50. | 0.6920 | 0.7188 | **Proof of Concept:** Validated pipeline stability. Good performance on the subset, establishing a baseline target for the full training run. |
+| **2** | **Scale Up (25M Rows):** Applied baseline config (Dim 50) directly to the full dataset. | 0.8682 | 0.8681 | **Underfitting (Saturation):** Loss plateaued significantly higher than Exp 1. The near-identical Train/Val scores indicated the model wasn't overfitting, but simply lacked the capacity (Dim 50) to capture 25M patterns. |
+| **3** | **Capacity Boost:** Increased Embedding Dim to 128, reduced Dropout (0.05) & Decay (1e-5). | **0.7058** | **0.7072** | **Optimal State:** Reducing regularization constraints and increasing "brain size" allowed the model to break the 0.86 floor. Achieved industry-standard error rates (~0.70) with stable generalization. |
+
+## Visual Analysis
+
+### 1. The Saturation Point (Experiment 2)
+*Observation: Upon scaling to 25M rows without increasing model size, the loss flatlined at ~0.868. The perfect overlap between Training and Validation loss confirmed the model was underfitting (high bias).*
+![Saturation Graph](docs/images/Experiment_1.png)
+
+### 2. The Capacity Breakthrough (Experiment 3)
+*Observation: By increasing the embedding dimension to 128 and relaxing regularization, the model successfully learned complex latent factors, dropping the loss to ~0.707 without diverging.*
+![Final Model Graph](docs/images/Experiment_2.png)
