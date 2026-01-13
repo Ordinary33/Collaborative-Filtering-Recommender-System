@@ -67,6 +67,9 @@ class MovieRecommender:
         query_title = str(
             self.movies_df[self.movies_df["movieId"] == movie_id]["title"].values[0]
         )
+        query_genre = str(
+            self.movies_df[self.movies_df["movieId"] == movie_id]["genres"].values[0]
+        )
         recommendations = []
 
         for i in range(1, len(indices[0])):
@@ -84,4 +87,4 @@ class MovieRecommender:
                     }
                 )
 
-        return query_title, recommendations
+        return query_title, query_genre, recommendations

@@ -37,11 +37,12 @@ def recommend_movie(movie_id: int):
             status_code=404, detail="Movie ID not found in the database."
         )
 
-    title, recommendations = movie_recommender.recommend(movie_id)
+    title, genre, recommendations = movie_recommender.recommend(movie_id)
 
     response = {
         "input_movie_id": movie_id,
         "title": title,
+        "genre": genre,
         "results": len(recommendations),
         "data": recommendations,
     }
