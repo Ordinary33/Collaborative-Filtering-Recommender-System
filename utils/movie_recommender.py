@@ -64,9 +64,9 @@ class MovieRecommender:
         distances, indices = self.knn.kneighbors(
             [self.item_embeddings[encoded_id]], n_neighbors=11
         )
-        query_title = self.movies_df[self.movies_df["movieId"] == movie_id][
-            "title"
-        ].values[0]
+        query_title = str(
+            self.movies_df[self.movies_df["movieId"] == movie_id]["title"].values[0]
+        )
         recommendations = []
 
         for i in range(1, len(indices[0])):
@@ -78,21 +78,10 @@ class MovieRecommender:
                 movie_info = rec_movie.iloc[0]
                 recommendations.append(
                     {
-                        "movieId": movie_info["movieId"],
-                        "title": movie_info["title"],
-                        "genres": movie_info["genres"],
+                        "movieId": str(movie_info["movieId"]),
+                        "title": str(movie_info["title"]),
+                        "genres": str(movie_info["genres"]),
                     }
                 )
 
         return query_title, recommendations
-
-
-if __name__ == "__main__":
-    recommender = MovieRecommender()
-    movie_id = 1
-    title, recs = recommender.recommend(movie_id)
-    print(f"Recommendations for '{title}':")
-    if recs == []:
-        print("No recommendations found.")
-    for rec in recs:
-        print(f"- {rec['title']} (Genres: {rec['genres']})")

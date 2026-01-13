@@ -11,7 +11,7 @@ if st.button("Get Recommendations"):
         try:
 
             with st.spinner("Fetching recommendations..."):
-                response = requests.get(f"http://127.0.0.1:8000/recommend/{isbn}")
+                response = requests.get(f"http://127.0.0.1:8000/recommend/book/{isbn}")
                 response.raise_for_status()
                 result = response.json()
 
