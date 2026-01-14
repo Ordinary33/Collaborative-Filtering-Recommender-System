@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-st.title("Book Recommender")
+st.title("📚 Book Recommender")
 
 isbn = st.text_input("Enter 10-digit ISBN of a book")
 
