@@ -2,6 +2,10 @@
 
 A multi-domain deep learning application that provides personalized content recommendations for Books and Movies. This system uses **Neural Collaborative Filtering (NCF)** specifically the **Generalized Matrix Factorization (GMF)** architecture to learn high-dimensional latent embeddings, serving predictions via a **FastAPI** API service and a **Streamlit** dashboard.
 
+## Demo
+
+https://github.com/user-attachments/assets/bd12a14e-b912-461a-a35b-b05601753ecf
+
 ---
 
 ## 🚀 Key Features
@@ -87,7 +91,7 @@ The Movie Recommender was trained on the Movie Recommendation System Kaggle data
 ### 🔮 Future Improvements
 * Expand Domain: Add more categories/domains.
 
-* Hybrid Filtering: Combine Collaborative Filtering with Content-Based filtering (Genre/Author metadata) to solve the "Cold Start" problem.
+* Hybrid Filtering: Combine Collaborative Filtering with Content-Based filtering (Genre/Author metadata).
 
-* Dockerize the application for cloud deployment.
+* Integrate TMDB API for movie posters.
 
