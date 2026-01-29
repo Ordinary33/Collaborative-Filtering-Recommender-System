@@ -42,6 +42,7 @@ https://github.com/user-attachments/assets/bd12a14e-b912-461a-a35b-b05601753ecf
 │       └── movie_recommender.py
 ├── EXPERIMENTS.md          # Experiment logs
 └── pyproject.toml          # Dependencies
+```
 
 ## ⚡ Installation & Setup
 
